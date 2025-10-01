@@ -1,0 +1,58 @@
+/* src/components/Layout.module.css */
+
+.layout {
+  display: flex;
+  height: 90dvh;
+}
+
+.sidebar {
+  width: 16rem; /* 64 Tailwind equivale a 16rem */
+  background-color: #1f2937; /* gray-800 */
+  color: white;
+  padding: 1rem;
+}
+
+.sidebarTitle {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.link {
+  text-decoration: none;
+  color: white;
+}
+
+.link:hover {
+  color: #d1d5db; /* gray-300 */
+}
+
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  background-color: #e5e7eb; /* gray-200 */
+  padding: 1rem;
+  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.headerTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.content {
+  flex: 1;
+  padding: 1.5rem;
+  background-color: #f9fafb; /* gray-50 */
+  overflow-y: auto;
+}

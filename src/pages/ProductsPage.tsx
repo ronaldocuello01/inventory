@@ -1,0 +1,122 @@
+import { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../hooks/reduxHook";
+import {
+  fetchProducts,
+  createProduct,
+  updateProduct,
+  deleteProduct
+} from "../features/products/productsSlice";
+
+import type { Product } from "../features/products/productsSlice";
+
+export default function ProductsPage() {
+  const dispatch = useAppDispatch();
+  const { items, loading, error } = useAppSelector((state) => state.products);
+
+  const [name, setName] = useState("");
+  const [price, setPrice] = useState<number>(0);
+  const [stock, setStock] = useState<number>(0);
+  const [productCategory, setProductCategory] = useState<number>(0);
+  const [editId, setEditId] = useState<number | null>(null);
+
+  useEffect(() => {
+    dispatch(fetchProducts());
+  }, [dispatch]);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (editId) {
+      dispatch(updateProduct({ id: editId, name, price, stock, productCategory: productCategory }));
+    } else {
+      dispatch(createProduct({ name, price, stock, productCategory: productCategory }));
+    }
+    setName("");
+    setPrice(0);
+    setStock(0);
+    setProductCategory(0);
+    setEditId(null);
+  };
+
+  const handleEdit = (product: Product) => {
+    setName(product.name);
+    setPrice(product.price);
+    setStock(product.stock);
+    setProductCategory(product.productCategory);
+    setEditId(product.id);
+  };
+
+  const handleDelete = (id: number) => {
+    dispatch(deleteProduct(id));
+  };
+
+  if (loading) return <p>Cargando productos...</p>;
+  if (error) return <p>Error: {error}</p>;
+
+  return (
+    <div style={{ maxWidth: "600px", margin: "auto" }}>
+      <h2>{editId ? "Editar Producto" : "Nuevo Producto"}</h2>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label>Nombre:</label>
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <label>Precio:</label>
+          <input
+            type="number"
+            value={price}
+            onChange={(e) => setPrice(Number(e.target.value))}
+            required
+          />
+        </div>
+        <div>
+          <label>Stock:</label>
+          <input
+            type="number"
+            value={stock}
+            onChange={(e) => setStock(Number(e.target.value))}
+            required
+          />
+        </div>
+        <div>
+          <label>Categoria ID:</label>
+          <input
+            type="number"
+            value={productCategory}
+            onChange={(e) => setProductCategory(Number(e.target.value))}
+            required
+          />
+        </div>
+        <button type="submit" style={{ marginTop: "10px" }}>
+          {editId ? "Actualizar" : "Crear"}
+        </button>
+      </form>
+
+      <h2 style={{ marginTop: "40px" }}>Productos</h2>
+      <ul>
+        {items.map((product) => (
+          <li key={product.id} style={{ marginBottom: "10px" }}>
+            {product.id} - {product.name} - ${product.price} - CatID: {product.productCategory}
+            <button
+              onClick={() => handleEdit(product)}
+              style={{ marginLeft: "10px" }}
+            >
+              Editar
+            </button>
+            <button
+              onClick={() => handleDelete(product.id)}
+              style={{ marginLeft: "5px" }}
+            >
+              Eliminar
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
