@@ -42,7 +42,7 @@ export default function ProductsPage() {
     e.preventDefault();
 
     if (!productCategory) {
-      alert("Debe seleccionar una Categoría válida para el producto. " + productCategory);
+      alert("Debe seleccionar una Categoría válida para el producto.");
       return;
     }
 
