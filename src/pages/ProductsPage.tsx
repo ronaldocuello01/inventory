@@ -44,10 +44,22 @@ export default function ProductsPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
+
+    if (price <= 0) {
+      alert("Debe colocar un precio válido.");
+      return;
+    }
+
+    if (stock < 0) {
+      alert("Debe colocar un stock válido.");
+      return;
+    }
+
     if (!productCategory) {
       alert("Debe seleccionar una Categoría válida para el producto.");
       return;
     }
+
 
     const productData = { name, price, stock, productCategory };
 

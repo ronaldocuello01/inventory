@@ -42,7 +42,6 @@ export default function ProductForm({
                         <input
                             id="price"
                             type="number"
-                            step="0.01" // Permite decimales para el precio
                             value={price}
                             onChange={(e) => setPrice(Number(e.target.value))}
                             required
