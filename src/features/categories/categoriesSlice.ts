@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import axios from "../../api/axiosConfig";
+import type { RootState } from "../../app/store";
 
 export interface Category {
   id: number;
@@ -15,10 +16,26 @@ interface CategoriesState {
 
 const initialState: CategoriesState = { items: [], loading: false, error: null };
 
-export const fetchCategories = createAsyncThunk("categories/fetchCategories", async () => {
-  const res = await axios.get("/productcategories");
-  return res.data;
-});
+// export const fetchCategories = createAsyncThunk("categories/fetchCategories", async () => {
+//   const res = await axios.get("/productcategories");
+//   return res.data;
+// });
+
+export const fetchCategories = createAsyncThunk<Category[], void, { state: RootState }>(
+  "categories/fetchCategories",
+  async (_, { getState, rejectWithValue }) => {
+    try {
+      const token = getState().users.loggedUser?.token;
+      const res = await axios.get("/productcategories", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return res.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data || "Error cargando productos");
+    }
+  }
+);
+
 
 const categoriesSlice = createSlice({
   name: "categories",

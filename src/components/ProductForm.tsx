@@ -1,7 +1,7 @@
-// src/components/ProductForm.tsx
 import React from 'react';
 // import type { Product } from '../features/products/productsSlice'; // Importa el tipo Product
-import './styles/ProductForm.css'; // Importa los estilos
+import './styles/ProductForm.css';
+import type { Category } from '../features/categories/categoriesSlice';
 
 interface ProductFormProps {
     name: string;
@@ -14,10 +14,12 @@ interface ProductFormProps {
     setProductCategory: (value: number) => void;
     editId: number | null;
     handleSubmit: (e: React.FormEvent) => void;
+    categories: Category[];
+    categoriesLoading: boolean;
 }
 
 export default function ProductForm({
-    name, setName, price, setPrice, stock, setStock, productCategory, setProductCategory, editId, handleSubmit
+    name, setName, price, setPrice, stock, setStock, productCategory, setProductCategory, editId, handleSubmit, categories, categoriesLoading
 }: ProductFormProps) {
 
     return (
@@ -56,16 +58,28 @@ export default function ProductForm({
                             required
                         />
                     </div>
+
                     <div className="form-group">
-                        <label htmlFor="category">Categoria ID:</label>
-                        <input
+                        <label htmlFor="category">Categoría:</label>
+                        <select
                             id="category"
-                            type="number"
                             value={productCategory}
                             onChange={(e) => setProductCategory(Number(e.target.value))}
                             required
-                        />
+                            disabled={categoriesLoading}
+                        >
+                            <option value={0} disabled>
+                                {categoriesLoading ? "Cargando..." : "Seleccione una categoría"}
+                            </option>
+                            {categories.map((cat) => (
+                                <option key={cat.id} value={cat.id}>
+                                    {cat.name}
+                                </option>
+                            ))}
+                        </select>
                     </div>
+
+
                 </div>
                 <button type="submit" className="form-submit-button">
                     {editId ? "Actualizar Producto" : "Crear Producto"}
@@ -74,3 +88,16 @@ export default function ProductForm({
         </div>
     );
 }
+
+
+
+{/* <div className="form-group">
+    <label htmlFor="category">Categoria ID:</label>
+    <input
+        id="category"
+        type="number"
+        value={productCategory}
+        onChange={(e) => setProductCategory(Number(e.target.value))}
+        required
+    />
+</div> */}

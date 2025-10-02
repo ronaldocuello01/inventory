@@ -59,3 +59,19 @@
 .form-submit-button:hover {
     background-color: #434190;
 }
+
+
+/* En Products.css o tu archivo de estilos de formulario */
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+    /* Estilos adicionales para select */
+    height: 40px; /* Igualar la altura de los inputs */
+    appearance: none; /* Quitar estilo nativo en Chrome/FF */
+    background-color: white;
+    color: #43434a;
+}
