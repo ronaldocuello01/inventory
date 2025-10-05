@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 // import type { Product } from '../features/products/productsSlice'; // Importa el tipo Product
 import './styles/ProductForm.css';
-import type { Category } from '../features/categories/categoriesSlice';
+import { fetchCategories, type Category } from '../features/categories/categoriesSlice';
+import { useAppDispatch, useAppSelector } from '../hooks/reduxHook';
 
 interface ProductFormProps {
     name: string;
@@ -14,13 +15,20 @@ interface ProductFormProps {
     setProductCategory: (value: number) => void;
     editId: number | null;
     handleSubmit: (e: React.FormEvent) => void;
-    categories: Category[];
-    categoriesLoading: boolean;
 }
 
 export default function ProductForm({
-    name, setName, price, setPrice, stock, setStock, productCategory, setProductCategory, editId, handleSubmit, categories, categoriesLoading
+    name, setName, price, setPrice, stock, setStock, productCategory, setProductCategory, editId, handleSubmit
 }: ProductFormProps) {
+    
+    const dispatch = useAppDispatch();
+    const { items: categories, loading: categoriesLoading } = useAppSelector((state: any) => state.categories);
+
+    useEffect(() => {
+		dispatch(fetchCategories());
+	}, [dispatch]);
+
+
 
     return (
         <div className="product-form-card">
@@ -70,7 +78,7 @@ export default function ProductForm({
                             <option value={0} disabled>
                                 {categoriesLoading ? "Cargando..." : "Seleccione una categoría"}
                             </option>
-                            {categories.map((cat) => (
+                            {categories.map((cat: Category) => (
                                 <option key={cat.id} value={cat.id}>
                                     {cat.name}
                                 </option>
